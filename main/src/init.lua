@@ -9,7 +9,7 @@ function Future:new()
 	return self:create()
 end
 
-function Future:Await(timeout)
+function Future:await(timeout)
 	local start = os.clock()
 	while true do
 		if self.ValueExists or self.ErrorExists then
@@ -17,14 +17,14 @@ function Future:Await(timeout)
 		end
 		local elapsed = os.clock() - start
 		if elapsed >= timeout then
-			self:CompleteError("Timed out")
+			self:completeError("Timed out")
 			break
 		end
 		task.wait()
 	end
 end
 
-function Future:Resolve(funcValue, funcError)
+function Future:resolve(funcValue, funcError)
 	if self.ValueExists and funcValue then
 		funcValue(self.Value)
 	elseif self.ErrorExists and funcError then
@@ -32,11 +32,11 @@ function Future:Resolve(funcValue, funcError)
 	end
 end
 
-function Future:BindValue(func)
+function Future:bindValue(func)
 	self.ValueCallback = func
 end
 
-function Future:CompleteValue(value)
+function Future:completeValue(value)
 	self.ValueExists = true
 	self.Value = value
 	if self.ValueCallback then
@@ -44,11 +44,11 @@ function Future:CompleteValue(value)
 	end
 end
 
-function Future:BindError(func)
+function Future:bindError(func)
 	self.ErrorCallback = func
 end
 
-function Future:CompleteError(error)
+function Future:completeError(error)
 	self.ErrorExists = true
 	self.Error = error
 	if self.ErrorCallback then
