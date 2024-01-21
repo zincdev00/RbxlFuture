@@ -22,6 +22,7 @@ function Future:await(timeout)
 		end
 		task.wait()
 	end
+	return self
 end
 
 function Future:resolve(funcValue, funcError)
@@ -30,6 +31,7 @@ function Future:resolve(funcValue, funcError)
 	elseif self.ErrorExists and funcError then
 		funcError(self.Error)
 	end
+	return self
 end
 
 function Future:bindValue(func)
